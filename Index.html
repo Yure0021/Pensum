@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Pensum Negocios Internacionales</title>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Quicksand', sans-serif;
+      background-color: #fefaff;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #6c3483;
+      font-size: 2.5em;
+      margin-bottom: 10px;
+    }
+    h1::after {
+      content: " 🎓✨";
+    }
+    h2 {
+      text-align: center;
+      color: #884ea0;
+      font-size: 1.5em;
+      margin-top: 0;
+    }
+    .semestre {
+      background-color: #f8e8ff;
+      padding: 15px;
+      border-radius: 14px;
+      margin: 20px auto;
+      max-width: 700px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      border: 2px dashed #d7bde2;
+    }
+    .semestre:nth-child(even) {
+      background-color: #f4e3ff;
+    }
+    .materia {
+      padding: 10px;
+      margin: 6px 0;
+      background-color: #efe3f6;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      font-size: 1.05em;
+    }
+    .materia:hover {
+      background-color: #e4d1f7;
+    }
+    .materia.vista {
+      text-decoration: line-through;
+      background-color: #d5f5e3 !important;
+      color: #6e6e6e;
+    }
+  </style>
+</head>
+<body>
+  <h1>Pensum Negocios Internacionales</h1>
+
+  <div id="contenedor"></div>
+
+  <script>
+    const malla = {
+      "Primer Semestre": [
+        "Teoría Administrativa",
+        "Inglés I",
+        "Matemáticas Operativas",
+        "Taller de Lenguaje",
+        "Pensamiento IUE",
+        "Introducción a Negocios Internacionales"
+      ],
+      "Segundo Semestre": [
+        "Contabilidad Financiera",
+        "Cálculo",
+        "Inglés II",
+        "Procesos Administrativos",
+        "Pedagogía Constitucional",
+        "Microeconomía"
+      ],
+      "Tercer Semestre": [
+        "Costos y Presupuestos",
+        "Competitividad y Estrategia",
+        "Procesos Investigativos",
+        "Inglés III",
+        "Programación Lineal",
+        "Macroeconomía"
+      ],
+      "Cuarto Semestre": [
+        "Estadística Descriptiva",
+        "Inglés IV",
+        "Relaciones Internacionales",
+        "Economía Nacional e Internacional",
+        "Matemáticas Financieras"
+      ],
+      "Quinto Semestre": [
+        "Inglés V",
+        "Negociación Internacional",
+        "Geopolítica",
+        "Legislación Laboral y Comercial",
+        "Estadística Inferencial"
+      ],
+      "Sexto Semestre": [
+        "Geopolítica",
+        "Legislación Laboral y Comercial",
+        "Estadística Inferencial",
+        "Mercadeo Internacional",
+        "Comercio Exterior",
+        "Sistemas de Información Financiera",
+        "Inglés VI",
+        "Investigación de Operaciones"
+      ],
+      "Séptimo Semestre": [
+        "Responsabilidad Social Empresarial",
+        "Inglés VII",
+        "Aranceles",
+        "Logística y DFI",
+        "Investigación Mercados Internacionales"
+      ],
+      "Octavo Semestre": [
+        "Derecho Cambiario y Aduanero",
+        "Gestión del Talento Humano",
+        "Sistemas Información Toma Decisiones",
+        "Ética Profesional",
+        "Inglés VIII"
+      ],
+      "Noveno Semestre": [
+        "Finanzas Internacionales",
+        "Derecho Internacional Público y Privado",
+        "Mercado Internacional de Capitales",
+        "Negociación Resolución Conflictos",
+        "Inglés IX"
+      ],
+      "Décimo Semestre": [
+        "Trabajo de Grado"
+      ],
+      "Complementarias": [
+        "Administración de Ventas"
+      ]
+    };
+
+    const contenedor = document.getElementById("contenedor");
+    const materiasVistas = JSON.parse(localStorage.getItem("materiasVistas") || "[]");
+
+    Object.entries(malla).forEach(([semestre, materias]) => {
+      const bloque = document.createElement("div");
+      bloque.className = "semestre";
+
+      const titulo = document.createElement("h2");
+      titulo.textContent = semestre + " 📝";
+      bloque.appendChild(titulo);
+
+      materias.forEach(nombre => {
+        const div = document.createElement("div");
+        div.className = "materia";
+        div.textContent = nombre;
+
+        if (materiasVistas.includes(nombre)) {
+          div.classList.add("vista");
+        }
+
+        div.onclick = () => {
+          div.classList.toggle("vista");
+          const index = materiasVistas.indexOf(nombre);
+          if (index > -1) {
+            materiasVistas.splice(index, 1);
+          } else {
+            materiasVistas.push(nombre);
+          }
+          localStorage.setItem("materiasVistas", JSON.stringify(materiasVistas));
+        };
+
+        bloque.appendChild(div);
+      });
+
+      contenedor.appendChild(bloque);
+    });
+  </script>
+</body>
+</html>
