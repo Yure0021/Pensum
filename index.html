@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Malla Curricular Interactiva</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #fdfdfd;
+      padding: 20px;
+    }
+    h1, h2 {
+      text-align: center;
+      color: #444;
+    }
+    .semestre {
+      background-color: #f0f8ff;
+      padding: 15px;
+      border-radius: 12px;
+      margin: 20px auto;
+      max-width: 700px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .semestre:nth-child(even) {
+      background-color: #fff0f5;
+    }
+    .materia {
+      padding: 10px;
+      margin: 5px 0;
+      background-color: #e6f7ff;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .materia:hover {
+      background-color: #d0ebff;
+    }
+    .materia.vista {
+      text-decoration: line-through;
+      background-color: #d4edda !important;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <h1>Malla Curricular Interactiva</h1>
+
+  <div id="contenedor"></div>
+
+  <script>
+    const malla = {
+      "Primer Semestre": [
+        "Teoría Administrativa",
+        "Inglés I",
+        "Matemáticas Operativas",
+        "Taller de Lenguaje",
+        "Pensamiento IUE",
+        "Introducción a Negocios Internacionales"
+      ],
+      "Segundo Semestre": [
+        "Contabilidad Financiera",
+        "Cálculo",
+        "Inglés II",
+        "Procesos Administrativos",
+        "Pedagogía Constitucional",
+        "Microeconomía"
+      ],
+      "Tercer Semestre": [
+        "Costos y Presupuestos",
+        "Competitividad y Estrategia",
+        "Procesos Investigativos",
+        "Inglés III",
+        "Programación Lineal",
+        "Macroeconomía"
+      ],
+      "Cuarto Semestre": [
+        "Estadística Descriptiva",
+        "Inglés IV",
+        "Relaciones Internacionales",
+        "Economía Nacional e Internacional",
+        "Matemáticas Financieras"
+      ],
+      "Quinto Semestre": [
+        "Inglés V",
+        "Negociación Internacional",
+        "Geopolítica",
+        "Legislación Laboral y Comercial",
+        "Estadística Inferencial",
+      ],"Sexto Semestre": [
+        "Geopolítica",
+        "Legislación Laboral y Comercial",
+        "Estadística Inferencial",
+        "Mercadeo Internacional",
+        "Comercio Exterior",
+        "Sistemas de Información Financiera",
+        "Inglés VI",
+        "Investigación de Operaciones"
+      ],
+      "Séptimo Semestre": [
+        "Responsabilidad Social Empresarial",
+        "Inglés VII",
+        "Aranceles",
+        "Logística y DFI",
+        "Investigación Mercados Internacionales"
+      ],
+      "Octavo Semestre": [
+        "Derecho Cambiario y Aduanero",
+        "Gestión del Talento Humano",
+        "Sistemas Información Toma Decisiones",
+        "Ética Profesional",
+        "Inglés VIII"
+      ],
+      "Noveno Semestre": [
+        "Finanzas Internacionales",
+        "Derecho Internacional Público y Privado",
+        "Mercado Internacional de Capitales",
+        "Negociación Resolución Conflictos",
+        "Inglés IX"
+      ],
+      "Décimo Semestre": [
+        "Trabajo de Grado"
+      ],
+      "Complementarias": [
+        "Administración de Ventas"
+      ]
+    };
+
+    const contenedor = document.getElementById("contenedor");
+    const materiasVistas = JSON.parse(localStorage.getItem("materiasVistas") || "[]");
+
+    Object.entries(malla).forEach(([semestre, materias]) => {
+      const bloque = document.createElement("div");
+      bloque.className = "semestre";
+
+      const titulo = document.createElement("h2");
+      titulo.textContent = semestre;
+      bloque.appendChild(titulo);
+
+      materias.forEach(nombre => {
+        const div = document.createElement("div");
+        div.className = "materia";
+        div.textContent = nombre;
+
+        if (materiasVistas.includes(nombre)) {
+          div.classList.add("vista");
+        }
+
+        div.onclick = () => {
+          div.classList.toggle("vista");
+          const index = materiasVistas.indexOf(nombre);
+          if (index > -1) {
+            materiasVistas.splice(index, 1);
+          } else {
+            materiasVistas.push(nombre);
+          }
+          localStorage.setItem("materiasVistas", JSON.stringify(materiasVistas));
+        };
+
+        bloque.appendChild(div);
+      });
+
+      contenedor.appendChild(bloque);
+    });
+  </script>
+</body>
+</html>
