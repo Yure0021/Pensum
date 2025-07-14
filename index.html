@@ -9,6 +9,7 @@
       font-family: 'Quicksand', sans-serif;
       background-color: #fefaff;
       padding: 20px;
+      margin-bottom: 80px;
     }
     h1 {
       text-align: center;
@@ -54,12 +55,52 @@
       background-color: #d5f5e3 !important;
       color: #6e6e6e;
     }
+    #creditos {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      background: #f6dff8;
+      border: 2px solid #ce9ddc;
+      border-radius: 14px;
+      padding: 10px 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      font-size: 0.9em;
+      color: #5a2961;
+      z-index: 9999;
+    }
+    #progreso {
+      text-align: center;
+      font-size: 1.1em;
+      margin-top: 10px;
+      color: #7d3c98;
+    }
+    #barraProgreso {
+      height: 16px;
+      width: 80%%;
+      max-width: 400px;
+      background-color: #f0d9ff;
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 0 auto 20px auto;
+      box-shadow: inset 0 0 4px rgba(0,0,0,0.2);
+    }
+    #nivelProgreso {
+      height: 100%%;
+      background-color: #a569bd;
+      transition: width 0.5s;
+    }
   </style>
 </head>
 <body>
   <h1>Pensum Negocios Internacionales</h1>
-
+  <div id="barraProgreso"><div id="nivelProgreso"></div></div>
+  <div id="progreso">Progreso: 0%</div>
   <div id="contenedor"></div>
+  <div id="creditos">
+    Hecho con 💜 por Karol Larios<br>
+    Est. Negocios Internacionales – IUE ✨<br>
+    <a href="https://github.com/karollarios" target="_blank">GitHub</a>
+  </div>
 
   <script>
     const malla = {
@@ -141,7 +182,11 @@
     };
 
     const contenedor = document.getElementById("contenedor");
+    const progresoTexto = document.getElementById("progreso");
+    const barra = document.getElementById("nivelProgreso");
     const materiasVistas = JSON.parse(localStorage.getItem("materiasVistas") || "[]");
+    let totalMaterias = 0;
+    let vistas = 0;
 
     Object.entries(malla).forEach(([semestre, materias]) => {
       const bloque = document.createElement("div");
@@ -152,12 +197,14 @@
       bloque.appendChild(titulo);
 
       materias.forEach(nombre => {
+        totalMaterias++;
         const div = document.createElement("div");
         div.className = "materia";
         div.textContent = nombre;
 
         if (materiasVistas.includes(nombre)) {
           div.classList.add("vista");
+          vistas++;
         }
 
         div.onclick = () => {
@@ -165,10 +212,13 @@
           const index = materiasVistas.indexOf(nombre);
           if (index > -1) {
             materiasVistas.splice(index, 1);
+            vistas--;
           } else {
             materiasVistas.push(nombre);
+            vistas++;
           }
           localStorage.setItem("materiasVistas", JSON.stringify(materiasVistas));
+          actualizarProgreso();
         };
 
         bloque.appendChild(div);
@@ -176,6 +226,14 @@
 
       contenedor.appendChild(bloque);
     });
+
+    function actualizarProgreso() {
+      const porcentaje = Math.round((vistas / totalMaterias) * 100);
+      progresoTexto.textContent = `Progreso: ${porcentaje}%`;
+      barra.style.width = `${porcentaje}%`;
+    }
+
+    actualizarProgreso();
   </script>
 </body>
 </html>
